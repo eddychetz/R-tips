@@ -11,7 +11,7 @@ library(tidyverse)
 library(fs)
 
 # Create a list of file paths
-file_paths <- fs::dir_ls("./00_data/houses_price_data/raw_data/")
+file_paths <- fs::dir_ls("./00_data/raw_house_price_data/")
 
 # Function to wrangle data
 wrangle_files <- function(file_paths){
@@ -104,12 +104,12 @@ data_tbl <- wrangle_files(file_paths)
 # STEP 3: Saving wrangled data ----
 
 # 1. Save wrangled data as CSV file
-write_csv(data_tbl, "./00_data/houses_price_data/cleaned_data/cleaned_data_tbl.csv")
+write_csv(data_tbl, "./00_data/wrangled_house_price_data/cleaned_data_tbl.csv")
 
 # 2. Save wrangled data in R's custom binary format
-write_rds(data_tbl, "./00_data/houses_price_data/cleaned_data/cleaned_data_tbl.rds")
+write_rds(data_tbl, "./00_data/wrangled_house_price_data/cleaned_data_tbl.rds")
 
 # 2. Save wrangled data excel format
-write_excel_csv(data_tbl, "./00_data/houses_price_data/cleaned_data/cleaned_data_tbl.xlsx")
+write_excel_csv(data_tbl, "./00_data/wrangled_house_price_data/cleaned_data_tbl.xlsx")
 
 
