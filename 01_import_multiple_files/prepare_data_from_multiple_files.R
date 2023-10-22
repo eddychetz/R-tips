@@ -10,9 +10,6 @@ library(tidyverse)
 # For handling file system 
 library(fs)
 
-# Cleaning names of columns
-library(janitor)
-
 # Create a list of file paths
 file_paths <- fs::dir_ls("./00_data/houses_price_data/raw_data/")
 
@@ -102,8 +99,7 @@ wrangle_files <- function(file_paths){
 # STEP 2: Using the wrangle function ----
 
 # Wrangle data using the `wrangle_files` function
-data_tbl <- wrangle_files(file_paths) %>%
-    clean_names()
+data_tbl <- wrangle_files(file_paths)
 
 # STEP 3: Saving wrangled data ----
 
@@ -112,7 +108,6 @@ write_csv(data_tbl, "./00_data/houses_price_data/cleaned_data/cleaned_data_tbl.c
 
 # 2. Save wrangled data in R's custom binary format
 write_rds(data_tbl, "./00_data/houses_price_data/cleaned_data/cleaned_data_tbl.rds")
-
 
 # 2. Save wrangled data excel format
 write_excel_csv(data_tbl, "./00_data/houses_price_data/cleaned_data/cleaned_data_tbl.xlsx")
