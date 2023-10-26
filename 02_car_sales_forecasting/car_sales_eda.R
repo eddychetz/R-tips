@@ -10,29 +10,36 @@ library(tidyquant)
 library(plotly)
 
 # Load and preprocess data
-car_sales <- read_csv("./") %>%
+car_sales <- read_csv("./00_data/car_sales_data.csv") %>%
     clean_names()
+
+
+# Feature engineering
+car_sales <- car_sales %>%
+    mutate(car_age = year(date) - car_year)
 
 car_sales %>% glimpse()
 
-# NEW: ADD EDA ----
-library(correlationfunnel)
-car_sales %>%
-    
-    select(-c(date,)) %>%
-    # one-hot encoding
-    binarize() %>%
-    glimpse() %>%
-    
-    # correlate against desired target
-    correlate(exited__1) %>%
-    plot_correlation_funnel()
-
-
+# # NEW: ADD EDA ----
+# library(correlationfunnel)
+# car_sales %>%
+#     
+#     select(-c(date, customer_name, salesperson, commission_earned, commission_rate)) %>%
+#     # one-hot encoding
+#     binarize() %>%
+#     glimpse() %>%
+#     
+#     # correlate against desired target
+#     correlate(`sale_price__-Inf_20019`) %>%
+#     plot_correlation_funnel()
+# 
+# 
 
 # DATA SPLIT ----
 
-car_split <- car_sales[,4:9] %>%
+car_split <- car_sales %>%
+    
+    select(c(car_make, car_model, car_age, sale_price)) %>%
     
     # Splitting Training set 80% and Test set is 20%
     initial_split(
