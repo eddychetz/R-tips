@@ -54,14 +54,18 @@ car_train <- training(car_split)
 
 # * Test data ----
 car_test <- testing(car_split)
+
+
 # PREPROCESSING ----
 
 # * Define the recipe ----
 
-car_recipe <- recipe(
-    sale_price ~ .,
-    data = training(car_split)
-) %>%
+data_prep <- car_train %>% 
+    recipe(
+        sale_price ~ .,
+        data = training(car_split)
+        ) %>%
+    update_role(car_make, car_model) %>%
     
     # Encode categorical features
     step_dummy(
@@ -72,17 +76,18 @@ car_recipe <- recipe(
     # Normalize all features
     step_normalize(all_predictors())
 
-
-car_recipe %>%
+car_baked <- bake(prep(data_prep), car_train)
+# car_baked <- bake(car_recipe %>%
     
     # Execute the steps in the training set
-    prep() %>%
+    # prep() %>%
     
     # Return variables from the processed training set
-    juice() %>%
+    # juice() %>%
     
     # Get the glimpse of your data
-    glimpse()
+    # glimpse(),
+    # car_train)
 
 # MODELING ----
 
@@ -143,7 +148,8 @@ metrics[,] %>%
 # FEATURE IMPORTANCE ----
 
 xgboost_trained <- xgb_car_price_wf %>%
-    extract_fit_parsnip()
+    extract_fit_parsnip() %>%
+    vip(5)
 
 # Save the model
 model_file_path <- "./02_car_sales_forecasting/xgboost_model.rds"

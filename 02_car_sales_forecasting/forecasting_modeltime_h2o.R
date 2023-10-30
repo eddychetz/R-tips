@@ -23,15 +23,17 @@ library(janitor)
 # Actual Sales demand data from car sales
 
 
-car_sales_tbl <- read_csv("./00_data/car_sales_data.csv") %>%
+car_sales_tbl <- read_csv("./00_data/car_sales_data.csv")[1:500000, ] %>%
     clean_names() %>%
-    select(date, car_year, sale_price) %>%
-    mutate(sales = sale_price, id = car_year) %>%
-    select(-c(sale_price, car_year))
+    select(date, car_model, sale_price) %>%
+    mutate(sales = sale_price, id = car_model) %>%
+    select(-c(sale_price, car_model))
+
+unique(car_sales_tbl$id)
 
 # * Time Plot ----
 
-car_sales_tbl %>%
+car_sales_tbl[, ] %>%
     group_by(id) %>%
     
     # From `timetk` package
@@ -40,8 +42,8 @@ car_sales_tbl %>%
         .value = sales,
         .facet_ncol = 3,
         .smooth = T,
-        .smooth_period = "2 quarters",
-        .interactive = T
+        .smooth_period = "4 quarters",
+        .interactive = F
     )
 
 # * Seasonality Plot ----
